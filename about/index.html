@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About | In 418</title>
+    <meta name="description" content="About In 418 (tea).">
+    
+    <link rel="icon" href="../favicon.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            bg: '#E8EBECCE',
+                            text: '#2B2F33',
+                            line: '#B0B5B9',
+                            accent: '#5E6C77'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Shippori Mincho', 'Noto Serif JP', 'serif'],
+                        mono: ['Courier New', 'Courier', 'monospace'],
+                    },
+                    letterSpacing: {
+                        widest: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/css/reset.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+</head>
+<body class="antialiased font-serif font-thin tracking-widest text-sm selection:bg-gray-400 selection:text-white">
+
+    <div class="scanlines"></div>
+    <div class="flicker-bg"></div>
+
+    <div id="opening-overlay" class="fixed inset-0 bg-[#E8EBEC] z-[9999] flex flex-col justify-center items-center transition-all duration-1000">
+        <div class="font-mono text-xs text-gray-400 mb-4 animate-pulse">SYSTEM BOOT...</div>
+        <div class="w-24 h-[1px] bg-gray-300 overflow-hidden relative">
+            <div class="absolute top-0 left-0 h-full w-full bg-gray-500 animate-[loading_2s_steps(4)_infinite]"></div>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 p-8 md:p-12 flex justify-between items-start pointer-events-none">
+        <a href="../" class="pointer-events-auto text-[10px] font-mono tracking-[0.2em] text-gray-500 hover:text-black transition-colors glitch-link" data-text="In 418">
+            In 418
+        </a>
+        
+        <div class="hidden md:flex flex-col gap-8 pointer-events-auto writing-vertical items-center">
+            <a href="./" class="text-[11px] font-serif text-theme-accent relative group cursor-default">
+                概略
+                <span class="absolute -right-2 top-0 w-[1px] h-full bg-theme-accent"></span>
+            </a>
+            <a href="../works/" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                作品
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+            <a href="../contact/" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                連絡
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+        </div>
+        
+        <div class="md:hidden pointer-events-auto">
+            <i data-lucide="menu" width="16" class="text-gray-500"></i>
+        </div>
+    </nav>
+
+    <div class="fixed top-8 right-8 md:top-12 md:right-12 z-40 font-mono text-[9px] text-gray-400 tracking-widest hidden md:block opacity-50">
+        <span id="clock">00:00:00</span>
+    </div>
+
+    <main class="min-h-screen flex flex-col justify-center items-center py-24 px-8 md:px-16 max-w-5xl mx-auto relative w-full">
+        <div class="absolute top-1/4 right-10 text-[12rem] font-serif text-white opacity-40 pointer-events-none select-none blur-sm writing-vertical z-0 leading-none">
+            紅茶
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10 w-full items-start mb-24">
+            <div class="md:col-span-4 reveal-blur">
+                <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 mb-12 uppercase border-b border-gray-300 pb-2 inline-block">Profile</h2>
+                <div class="w-32 h-40 bg-gray-300 relative overflow-hidden grayscale contrast-125 mb-6">
+                    <img src="../assets/img/user/in418.webp" alt="In 418" class="w-full h-full object-cover opacity-80" onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#aaa'">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
+                    <div class="absolute bottom-2 right-2 text-[9px] font-mono bg-white px-1 tracking-tighter text-black">ERROR</div>
+                </div>
+                <p class="font-mono text-[10px] text-gray-500">In 418 / tea</p>
+            </div>
+
+            <div class="md:col-span-8 space-y-12 md:pt-10 reveal-blur" style="transition-delay: 0.2s;">
+                <p class="text-sm md:text-base leading-10 text-theme-text font-serif text-justify tracking-widest">
+                    騒がしい現実から、ほんの少しだけ身を引いて。<br>
+                    自分だけの静かな箱庭で、今日も音で遊んでいます。<br><br>
+                    誰かの期待に応えるためでも、<br>
+                    数字や評価を追いかけるためでもなく。<br>
+                    ただ、自分が息をしやすい居場所を残しておくために。<br><br>
+                    どこを探しても人がいない、孤独で満ち溢れた場所。<br>
+                    そんな、居心地の良い景色を、そっと音にして。<br><br>
+                    ここにあるのは、答えでもなく、肯定でもない。<br>
+                    ただ、淡々と流れる時間と、心地よい響きだけ。<br><br>
+                    現実に居場所がなかったわけじゃない。<br>
+                    ただ、ここでしか生きられなかった夜があっただけで。<br><br>
+                    もし、今いる場所が少しだけ息苦しくなったなら。<br>
+                    ほんのひととき、こちら側の世界で<br>
+                    羽を休めていきませんか。<br><br>
+                    ずっと居たいと思える、<br>
+                    静かで、どこか懐かしい場所を用意して待っています。
+                </p>
+            </div>
+        </div>
+
+        <div class="w-full relative z-10 reveal-blur" style="transition-delay: 0.4s;">
+            <div class="md:grid md:grid-cols-12 gap-12">
+                <div class="md:col-span-4">
+                    <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 mb-8 uppercase border-b border-gray-300 pb-2 inline-block">History</h2>
+                </div>
+                <div class="md:col-span-8">
+                    <div class="relative border-l border-gray-300 ml-1 pl-8 space-y-12 py-2">
+                        <div class="relative group">
+                            <span class="absolute -left-[37px] top-1.5 w-2 h-2 bg-gray-400 rounded-full ring-4 ring-[#E8EBEC] group-hover:bg-theme-accent transition-colors"></span>
+                            <span class="text-[10px] font-mono text-gray-400 block mb-2 tracking-wider">2026.01.19</span>
+                            <p class="text-sm font-serif text-theme-text tracking-widest">サイト公開</p>
+                        </div>
+
+                        <div class="relative group">
+                            <span class="absolute -left-[37px] top-1.5 w-2 h-2 bg-gray-300 rounded-full ring-4 ring-[#E8EBEC] group-hover:bg-theme-accent transition-colors"></span>
+                            <span class="text-[10px] font-mono text-gray-400 block mb-2 tracking-wider">2026.04.01</span>
+                            <p class="text-sm font-serif text-theme-text tracking-widest">活動開始</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-[#2B2F33] py-4 text-center border-t border-gray-700 w-full">
+        <p class="text-[9px] font-mono text-gray-600 tracking-widest">
+            <a href="../" class="hover:text-gray-400 transition-colors">© <span id="year"></span> In 418 / tea.</a>
+            <span class="hidden md:inline ml-4">ALL SYSTEMS NOMINAL.</span>
+        </p>
+    </footer>
+
+    <script src="../assets/js/scroll.js"></script>
+    <script src="../assets/js/animation.js"></script>
+
+    <script>
+        // Init
+        lucide.createIcons();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // オープニング開始
+        startOpeningSequence();
+    </script>
+</body>
+</html>
