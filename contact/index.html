@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | In 418</title>
+    <meta name="description" content="Contact In 418 (tea).">
+    
+    <link rel="icon" href="../favicon.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            bg: '#E8EBECCE',
+                            text: '#2B2F33',
+                            line: '#B0B5B9',
+                            accent: '#5E6C77'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Shippori Mincho', 'Noto Serif JP', 'serif'],
+                        mono: ['Courier New', 'Courier', 'monospace'],
+                    },
+                    letterSpacing: {
+                        widest: '.3em',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="../assets/css/reset.css">
+    <link rel="stylesheet" href="../assets/css/main.css">
+    
+    <style>
+        /* Contact固有の調整が必要な場合のみ記述 */
+    </style>
+</head>
+<body class="antialiased font-serif font-thin tracking-widest text-sm selection:bg-gray-400 selection:text-white">
+
+    <div class="scanlines"></div>
+    <div class="flicker-bg"></div>
+
+    <div id="opening-overlay" class="fixed inset-0 bg-[#E8EBEC] z-[9999] flex flex-col justify-center items-center transition-all duration-1000">
+        <div class="font-mono text-xs text-gray-400 mb-4 animate-pulse">SYSTEM BOOT...</div>
+        <div class="w-24 h-[1px] bg-gray-300 overflow-hidden relative">
+            <div class="absolute top-0 left-0 h-full w-full bg-gray-500 animate-[loading_2s_steps(4)_infinite]"></div>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 p-8 md:p-12 flex justify-between items-start pointer-events-none">
+        <a href="../" class="pointer-events-auto text-[10px] font-mono tracking-[0.2em] text-gray-500 hover:text-black transition-colors glitch-link" data-text="In 418">
+            In 418
+        </a>
+        
+        <div class="hidden md:flex flex-col gap-8 pointer-events-auto writing-vertical items-center">
+            <a href="../about/" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                概略
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+            <a href="../works/" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                作品
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+            <a href="./" class="text-[11px] font-serif text-theme-accent relative group cursor-default">
+                連絡
+                <span class="absolute -right-2 top-0 w-[1px] h-full bg-theme-accent"></span>
+            </a>
+        </div>
+        
+        <div class="md:hidden pointer-events-auto">
+            <i data-lucide="menu" width="16" class="text-gray-500"></i>
+        </div>
+    </nav>
+
+    <div class="fixed top-8 right-8 md:top-12 md:right-12 z-40 font-mono text-[9px] text-gray-400 tracking-widest hidden md:block opacity-50">
+        <span id="clock">00:00:00</span>
+    </div>
+
+    <main class="min-h-screen flex flex-col justify-center items-center py-24 px-8 md:px-16 max-w-4xl mx-auto relative w-full">
+        <div class="absolute top-1/4 right-10 text-[12rem] font-serif text-white opacity-40 pointer-events-none select-none blur-sm writing-vertical z-0 leading-none">
+            紅茶
+        </div>
+
+        <div class="relative z-10 w-full max-w-2xl">
+            <div class="reveal-blur text-center md:text-left mb-16">
+                <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 mb-8 uppercase border-b border-gray-300 pb-2 inline-block">Contact Protocol</h2>
+                <p class="text-sm font-serif leading-loose opacity-70">
+                    ご依頼ご相談は以下からお送りください。<br>
+                    <span class="text-[10px] font-mono text-gray-400 block mt-2">※メーラーが起動します</span>
+                </p>
+            </div>
+
+            <form id="contactForm" class="space-y-12 reveal-blur" style="transition-delay: 0.2s;" onsubmit="return false;">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                    <div class="space-y-2">
+                        <label for="name" class="block text-[10px] font-mono text-gray-400 uppercase tracking-widest">Name / Handle</label>
+                        <input type="text" id="name" name="name" class="custom-input" placeholder="Enter your name" required>
+                    </div>
+                    
+                    <div class="space-y-2">
+                        <label for="subject" class="block text-[10px] font-mono text-gray-400 uppercase tracking-widest">Subject</label>
+                        <select id="subject" name="subject" class="custom-input">
+                            <option value="ご依頼について">ご依頼について</option>
+                            <option value="作品に関するお問い合わせ">作品に関するお問い合わせ</option>
+                            <option value="その他">その他</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-2">
+                    <label for="message" class="block text-[10px] font-mono text-gray-400 uppercase tracking-widest">Message</label>
+                    <textarea id="message" name="message" rows="5" class="custom-input resize-none" placeholder="Type your message..." required></textarea>
+                </div>
+
+                <div class="pt-8 flex justify-center md:justify-start">
+                    <button type="button" onclick="sendMail()" class="group relative px-12 py-4 bg-transparent border border-gray-400 hover:bg-gray-400 transition-all duration-300 overflow-hidden">
+                        <span class="relative z-10 text-[10px] font-mono tracking-[0.3em] text-gray-600 group-hover:text-white transition-colors">SEND_SIGNAL</span>
+                        <div class="absolute inset-0 bg-gray-400 transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left"></div>
+                    </button>
+                </div>
+            </form>
+            
+            <div class="mt-20 text-center md:text-left reveal-blur opacity-50 text-[10px] font-mono text-gray-400" style="transition-delay: 0.4s;">
+                Or direct access: contact@in418-tea.com
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-[#2B2F33] py-4 text-center border-t border-gray-700 w-full">
+        <p class="text-[9px] font-mono text-gray-600 tracking-widest">
+            <a href="../" class="hover:text-gray-400 transition-colors">© <span id="year"></span> In 418 / tea.</a>
+            <span class="hidden md:inline ml-4">ALL SYSTEMS NOMINAL.</span>
+        </p>
+    </footer>
+
+    <script src="../assets/js/scroll.js"></script>
+    <script src="../assets/js/animation.js"></script>
+
+    <script>
+        // Init
+        lucide.createIcons();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // オープニング開始
+        startOpeningSequence();
+
+        // Contact Page Specific Logic (Mailto)
+        function sendMail() {
+            const name = document.getElementById('name').value;
+            const subject = document.getElementById('subject').value;
+            const message = document.getElementById('message').value;
+
+            if (!name || !message) {
+                alert('Please fill in the required fields.');
+                return;
+            }
+
+            const mailSubject = `[IN418-CONTACT] ${subject}`;
+            const mailBody = `>>> CONTACT LOG : IN418
+
+SENDER    : ${name}
+CATEGORY  : ${subject}
+
+MESSAGE :
+${message}
+
+<<< END LOG`;
+
+            const mailToLink = `mailto:contact@in418-tea.com?subject=${encodeURIComponent(mailSubject)}&body=${encodeURIComponent(mailBody)}`;
+            
+            window.location.href = mailToLink;
+        }
+    </script>
+</body>
+</html>
