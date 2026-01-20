@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>In 418</title>
+    <meta name="description" content="Sound Creator In 418 (tea) Portfolio Site.">
+    
+    <link rel="icon" href="./favicon.ico">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;300;400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        theme: {
+                            bg: '#E8EBECCE', // 曇り空グレー
+                            text: '#2B2F33', // 鉛色
+                            line: '#B0B5B9', // コンクリート
+                            accent: '#5E6C77'  // くすんだ青
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Shippori Mincho', 'Noto Serif JP', 'serif'],
+                        mono: ['Courier New', 'Courier', 'monospace'], // デジタル感
+                    },
+                    letterSpacing: {
+                        widest: '.3em', // 余白多め
+                    }
+                }
+            }
+        }
+    </script>
+
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/main.css">
+
+    <style>
+        /* 画像コンテナ (Works一覧でも使うため本来はmain.css推奨ですが、念のため残しています) */
+        .work-img-container {
+            position: relative;
+            filter: grayscale(80%) contrast(90%);
+            transition: filter 0.5s;
+            overflow: hidden;
+        }
+        .work-img-container:hover {
+            filter: grayscale(0%) contrast(100%);
+        }
+        .work-img-container::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(232, 235, 236, 0.2);
+            pointer-events: none;
+        }
+        .work-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* 線画アニメ (Top固有) */
+        @keyframes drawStroke {
+            to { stroke-dashoffset: 0; }
+        }
+
+        /* スクロール誘導の線 (Top固有) */
+        @keyframes drop-line {
+            0% { transform: translateY(-100%); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100%); opacity: 0; }
+        }
+
+        /* ロゴSVG (Top固有) */
+        svg#mySvg {
+            width: 100%;
+            height: auto;
+            max-width: 500px;
+            filter: drop-shadow(0 0 1px rgba(0,0,0,0.2));
+            transition: opacity 1.5s ease;
+        }
+    </style>
+</head>
+<body class="antialiased font-serif font-thin tracking-widest text-sm selection:bg-gray-400 selection:text-white">
+
+    <div class="scanlines"></div>
+    <div class="flicker-bg"></div>
+    
+    <div id="opening-overlay" class="fixed inset-0 bg-[#E8EBEC] z-[9999] flex flex-col justify-center items-center transition-all duration-1000">
+        <div class="font-mono text-xs text-gray-400 mb-4 animate-pulse">SYSTEM BOOT...</div>
+        <div class="w-24 h-[1px] bg-gray-300 overflow-hidden relative">
+            <div class="absolute top-0 left-0 h-full w-full bg-gray-500 animate-[loading_2s_steps(4)_infinite]"></div>
+        </div>
+    </div>
+
+    <nav class="fixed w-full z-50 p-8 md:p-12 flex justify-between items-start pointer-events-none">
+        <a href="/" class="pointer-events-auto text-[10px] font-mono tracking-[0.2em] text-gray-500 hover:text-black transition-colors glitch-link" data-text="In 418">
+            In 418
+        </a>
+        
+        <div class="hidden md:flex flex-col gap-8 pointer-events-auto writing-vertical items-center">
+            <a href="./about/index.html" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                概略
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+            <a href="./works/index.html" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                作品
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+            <a href="./contact/index.html" class="text-[11px] font-serif hover:text-theme-accent transition-colors relative group">
+                連絡
+                <span class="absolute -right-2 top-0 w-[1px] h-0 bg-gray-400 transition-all group-hover:h-full"></span>
+            </a>
+        </div>
+        
+        <div class="md:hidden pointer-events-auto">
+            <i data-lucide="menu" width="16" class="text-gray-500"></i>
+        </div>
+    </nav>
+
+    <div class="fixed top-8 right-8 md:top-12 md:right-12 z-40 font-mono text-[9px] text-gray-400 tracking-widest hidden md:block opacity-50">
+        <span id="clock">00:00:00</span>
+    </div>
+
+    <section class="h-screen flex flex-col justify-center items-center relative w-full border-b border-white/50">
+        <div class="w-full max-w-xl px-12 md:px-0 mb-16 opacity-0" id="hero-svg-container">
+            <svg id="mySvg" viewBox="0 0 1190 577" fill="none" xmlns="http://www.w3.org/2000/svg">
+                 <path d="M181.424 129.796C181.424 129.796 242.924 76.2958 297.424 44.7958C351.924 13.2958 433.424 8.29579 433.424 8.29579C433.424 8.29579 324.424 218.796 257.424 324.796C190.424 430.796 126.924 502.296 102.924 525.796C78.9243 549.296 27.9243 577.796 12.9243 566.296C-2.07565 554.796 14.9243 493.296 52.9243 447.796C90.9244 402.296 251.424 294.796 308.424 260.296C365.424 225.796 408.424 209.796 414.424 207.796C420.424 205.796 362.924 307.296 374.424 298.296C385.924 289.296 443.924 234.796 464.924 216.796C485.924 198.796 516.424 183.796 508.424 198.796C500.424 213.796 494.424 223.296 485.924 240.296C477.424 257.296 469.924 273.296 479.424 272.796C488.924 272.296 510.424 266.796 534.924 250.296C559.424 233.796 735.924 66.2958 735.924 66.2958L574.924 219.296C574.924 219.296 796.424 191.796 785.424 197.796C774.424 203.796 619.424 298.296 619.424 298.296L888.924 54.2958C888.924 54.2958 796.924 273.296 785.424 298.296C773.924 323.296 992.424 170.296 1036.42 143.296C1080.42 116.296 1103.92 96.7958 1100.92 78.7958C1097.92 60.7958 1081.92 52.7958 1058.92 54.2958C1035.92 55.7958 983.924 85.7958 973.924 122.796C963.924 159.796 1060.42 219.296 1030.92 252.296C1001.42 285.296 976.924 309.296 938.424 307.296C899.924 305.296 907.924 231.796 907.924 231.796" stroke="#4a5568" stroke-width="3"/>
+                 <path d="M37.4244 390.296L1188.92 293.296L1040.42 278.796L1150.42 369.296L1111.92 229.796L1063.42 362.796L1186.92 283.796" stroke="#4a5568" stroke-width="2"/>
+            </svg>
+        </div>
+
+        <div class="text-center space-y-6 reveal-blur">
+            <p class="text-[10px] md:text-xs font-mono tracking-[0.4em] text-gray-500 uppercase glitch-link" data-text="Composer / Sound Design">
+                Composer / Sound Design
+            </p>
+        </div>
+
+        <div id="scroll-indicator" class="absolute bottom-6 md:bottom-8 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-0 transition-opacity duration-700 pointer-events-none z-20">
+            <span class="text-[9px] font-mono tracking-[0.3em] text-theme-accent mb-2 font-bold animate-pulse">SCROLL</span>
+            <div class="w-[1px] h-16 bg-gray-300/30 overflow-hidden relative">
+                <div class="absolute top-0 left-0 w-full h-full bg-theme-accent animate-[drop-line_1.5s_ease-in-out_infinite]"></div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-16 left-8 md:left-16 reveal-blur" style="transition-delay: 0.8s;">
+            <div class="writing-vertical text-[10px] text-gray-400 tracking-[0.4em] font-serif">
+                この世界は<br>腐っている
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="py-40 px-8 md:px-16 max-w-5xl mx-auto relative">
+        <div class="absolute top-20 right-10 text-[12rem] font-serif text-white opacity-40 pointer-events-none select-none blur-sm writing-vertical z-0 leading-none">
+            紅茶
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-12 relative z-10">
+            <div class="md:col-span-4 reveal-blur">
+                <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 mb-12 uppercase border-b border-gray-300 pb-2 inline-block">Profile</h2>
+                
+                <div class="w-32 h-40 bg-gray-300 relative overflow-hidden grayscale contrast-125 mb-6">
+                    <img src="./assets/img/user/in418.webp" alt="In 418" class="w-full h-full object-cover opacity-80" onerror="this.style.display='none'; this.parentElement.style.backgroundColor='#aaa'">
+                    <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')] opacity-30 pointer-events-none"></div>
+                    <div class="absolute bottom-2 right-2 text-[9px] font-mono bg-white px-1 tracking-tighter">ERROR : 418</div>
+                </div>
+                <p class="font-mono text-[10px] text-gray-500">In 418 / tea</p>
+            </div>
+            
+            <div class="md:col-span-8 space-y-12 md:pt-20 reveal-blur" style="transition-delay: 0.2s;">
+                <p class="text-sm md:text-base leading-10 text-theme-text font-serif text-justify tracking-widest bg-[#E8EBEC]/80 backdrop-blur-sm p-4 rounded-sm border border-white/20">
+                    現実世界から逃げた、<br>
+                    自分だけの静かな世界で音楽を作っています。<br>
+                    誰かに評価されるための音楽ではなく、<br>
+                    自分が住みたい世界の音楽を。<br><br>
+                    ずっと居たい、落ち着ける静かな世界。<br>
+                    これを読んでいるあなたも、<br>
+                    こちら側に来てみませんか。
+                </p>
+                
+                <div class="pt-8">
+                    <a href="./about/index.html" class="text-[10px] font-mono border-b border-gray-400 pb-1 hover:text-gray-500 transition-colors">
+                        READ_MORE
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="works" class="py-32 bg-[#E3E6E7] relative border-t border-white/50">
+        <div class="px-8 md:px-16 max-w-6xl mx-auto">
+            <div class="mb-24 flex justify-between items-end reveal-blur">
+                <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 uppercase">Records</h2>
+                <a href="./works/index.html" class="text-[9px] font-mono text-gray-400 hover:text-black transition-colors">VIEW ALL</a>
+            </div>
+
+            <div class="space-y-32">
+                <article class="group md:flex gap-16 items-start reveal-blur">
+                    <div class="md:w-5/12 work-img-container aspect-[4/3] bg-[#D0D4D6] relative shadow-lg flex items-center justify-center">
+                        <img src="./assets/img/works/418-01.webp" alt="Work 01" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.opacity='0'">
+                        <div class="text-xs font-mono tracking-widest text-gray-500 relative z-10">COMING SOON</div>
+                        <div class="absolute top-4 left-4 text-[9px] font-mono text-gray-500 border border-gray-500 px-1 z-10">NO.--</div>
+                    </div>
+                    <div class="md:w-7/12 mt-8 md:mt-0 pt-4">
+                        <div class="flex items-baseline gap-4 mb-6">
+                            <h3 class="text-xl md:text-2xl font-serif text-gray-400 tracking-[0.2em]">Coming Soon</h3>
+                            <span class="text-[9px] font-mono text-gray-400">---- / ----</span>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-7 font-serif mb-10 w-full md:w-3/4">
+                            ----------------------<br>
+                            ----------------------
+                        </p>
+                    </div>
+                </article>
+
+                <article class="group md:flex gap-16 items-start reveal-blur md:flex-row-reverse text-right">
+                    <div class="md:w-5/12 work-img-container aspect-[4/3] bg-[#D0D4D6] relative shadow-lg flex items-center justify-center">
+                         <img src="./assets/img/works/418-02.webp" alt="Work 02" class="absolute inset-0 w-full h-full object-cover" onerror="this.style.opacity='0'">
+                         <div class="text-xs font-mono tracking-widest text-gray-500 relative z-10">COMING SOON</div>
+                         <div class="absolute top-4 right-4 text-[9px] font-mono text-gray-500 border border-gray-500 px-1 z-10">NO.--</div>
+                    </div>
+                    <div class="md:w-7/12 mt-8 md:mt-0 pt-4 md:items-end flex flex-col">
+                        <div class="flex items-baseline gap-4 mb-6 flex-row-reverse">
+                            <h3 class="text-xl md:text-2xl font-serif text-gray-400 tracking-[0.2em]">Coming Soon</h3>
+                            <span class="text-[9px] font-mono text-gray-400">---- / ----</span>
+                        </div>
+                        <p class="text-xs text-gray-400 leading-7 font-serif mb-10 w-full md:w-3/4">
+                            ----------------------<br>
+                            ----------------------
+                        </p>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-8 md:px-16 max-w-4xl mx-auto border-t border-white/50">
+        <h2 class="text-[10px] font-mono tracking-[0.3em] text-gray-500 mb-16 uppercase text-center">System / Service</h2>
+        
+        <div class="border-t border-b border-gray-300 reveal-blur">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-8 border-b border-gray-300/50 items-baseline group hover:bg-white/30 transition-colors">
+                <div class="md:col-span-2 text-[10px] font-mono text-gray-400">001</div>
+                <div class="md:col-span-4 text-sm font-serif tracking-widest">楽曲制作</div>
+                <div class="md:col-span-6 text-[10px] text-gray-500 leading-6 font-mono">
+                    静かで落ち着いた世界観の音楽を作っています。<br>
+                    歌ものからBGMまで幅広く。
+                </div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-4 py-8 items-baseline group hover:bg-white/30 transition-colors">
+                <div class="md:col-span-2 text-[10px] font-mono text-gray-400">002</div>
+                <div class="md:col-span-4 text-sm font-serif tracking-widest">MIX</div>
+                <div class="md:col-span-6 text-[10px] text-gray-500 leading-6 font-mono">
+                    曲の雰囲気に合わせたMIXを行っています
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="py-40 bg-[#2B2F33] text-gray-400 text-center relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10"></div>
+
+        <div class="relative z-10 reveal-blur">
+            <h2 class="text-[10px] font-mono tracking-[0.3em] mb-16 uppercase">Contact Protocol</h2>
+            
+            <p class="text-xs font-serif leading-loose mb-16 opacity-70">
+                お問い合わせはこちらから
+            </p>
+            
+            <div class="inline-block border border-gray-600 p-1">
+                <a href="./contact/index.html" class="block bg-[#E8EBEC] text-[#2B2F33] px-12 py-4 font-mono text-xs hover:bg-gray-400 hover:text-white transition-colors tracking-widest">
+                    OPEN FORM
+                </a>
+            </div>
+
+            <div class="mt-20 flex justify-center gap-8 opacity-30">
+                <i data-lucide="twitter" width="16" class="hover:opacity-100 transition-opacity cursor-pointer"></i>
+                <i data-lucide="instagram" width="16" class="hover:opacity-100 transition-opacity cursor-pointer"></i>
+                <i data-lucide="github" width="16" class="hover:opacity-100 transition-opacity cursor-pointer"></i>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-[#2B2F33] py-4 text-center border-t border-gray-700">
+        <p class="text-[9px] font-mono text-gray-600 tracking-widest">
+            © <span id="year"></span> In 418 / tea. <span class="hidden md:inline ml-4">ALL SYSTEMS NOMINAL.</span>
+        </p>
+    </footer>
+
+    <script src="./assets/js/scroll.js"></script>
+    <script src="./assets/js/animation.js"></script>
+
+    <script>
+        // Init (Icons)
+        lucide.createIcons();
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Anim State
+        let isOpeningSequenceFinished = false;
+
+        // SVG Animation Function (Top Page Specific)
+        function startSvgAnimation() {
+            const svg = document.getElementById('mySvg');
+            const container = document.getElementById('hero-svg-container');
+            
+            if(container) {
+                container.style.transition = 'opacity 2s ease';
+                container.style.opacity = '1';
+            }
+
+            let maxDuration = 0;
+
+            if(svg) {
+                const paths = svg.querySelectorAll('path');
+                paths.forEach((path, index) => {
+                    // 線を描くアニメーション
+                    const length = path.getTotalLength();
+                    path.style.strokeDasharray = length;
+                    path.style.strokeDashoffset = length;
+                    
+                    const duration = 4;
+                    const delay = index * 1.5;
+                    
+                    path.style.animation = `drawStroke ${duration}s cubic-bezier(0.22, 1, 0.36, 1) forwards ${delay}s`;
+                    
+                    const totalTime = duration + delay;
+                    if (totalTime > maxDuration) {
+                        maxDuration = totalTime;
+                    }
+                });
+            }
+
+            // 終了後
+            setTimeout(() => {
+                const scrollIndicator = document.getElementById('scroll-indicator');
+                if(svg) svg.style.opacity = '0.3'; // 薄くする
+                if (scrollIndicator) scrollIndicator.style.opacity = '1';
+                isOpeningSequenceFinished = true;
+            }, maxDuration * 1000);
+        }
+
+        // オープニング実行 (完了後にSVGアニメ開始)
+        startOpeningSequence(() => {
+            startSvgAnimation();
+        });
+
+        // Scroll Indicator Logic (Top Page Specific)
+        window.addEventListener('scroll', () => {
+            if (!isOpeningSequenceFinished) return;
+            const scrollIndicator = document.getElementById('scroll-indicator');
+            if (!scrollIndicator) return;
+
+            if (window.scrollY > 50) {
+                scrollIndicator.style.opacity = '0';
+            } else {
+                scrollIndicator.style.opacity = '1';
+            }
+        });
+    </script>
+</body>
+</html>
